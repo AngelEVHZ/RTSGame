@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour
     Vector3 mousePosition;
     private bool order;
     private List<GameObject> selectedSoldiersList;
-
     public Image cancelOrderImage;
     
     // Start is called before the first frame update
@@ -113,9 +112,11 @@ public class PlayerController : MonoBehaviour
             positionEnd += new Vector3(+1f, +1f, 0) * (minDistance - distance) * 2f;
         }
         foreach (var soldier in foundObjects) {
-            if (Utils.isWithinSelectionBounds(soldier.transform, 
+            if ( !soldier.GetComponent<Soldier>().isEnemy &&
+                Utils.isWithinSelectionBounds(soldier.transform, 
                 positionStart, 
-                positionEnd)) {
+                positionEnd) 
+               ) {
                 soldier.GetComponent<Soldier>().selectSoldier(true);
                 this.selectedSoldiersList.Add(soldier);
             }
@@ -127,18 +128,22 @@ public class PlayerController : MonoBehaviour
     }
     public void deSelectSoldiers() {
         foreach (var soldier in this.selectedSoldiersList) {
-            soldier.GetComponent<Soldier>().selectSoldier(false);    
+            if (soldier) {
+                soldier.GetComponent<Soldier>().selectSoldier(false);    
+            }
         }
         this.selectedSoldiersList = new List<GameObject>();
     }
 
 
     public void moveSoldiers() {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Utils.getScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit)){
             foreach (var soldier in this.selectedSoldiersList) {
-                soldier.GetComponent<Soldier>().moveToPoint(hit);    
+               if (soldier) {
+                    soldier.GetComponent<Soldier>().moveToPoint(hit, this.selectedSoldiersList.Count);    
+               }
             }
         }
     }

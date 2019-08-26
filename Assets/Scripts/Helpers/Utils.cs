@@ -11,7 +11,11 @@ public  static class Utils {
     }
 
     public static bool IsMouseOverUI() {
-        return EventSystem.current.IsPointerOverGameObject();
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+        pointerEventData.position = Input.mousePosition;
+        List<RaycastResult> raycastResultList = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerEventData, raycastResultList);
+        return raycastResultList.Count > 0;
     }
 
     public static bool IsMouseOverUIWithIgnores(string ignores) {
@@ -38,4 +42,8 @@ public  static class Utils {
                 Camera.main.transform.position.z));
     }
 
+    public static Ray getScreenPointToRay (Vector3 pos) {
+        return Camera.main.ScreenPointToRay(pos);
+    }
+     
 }

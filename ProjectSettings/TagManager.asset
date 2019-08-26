@@ -7,6 +7,8 @@ TagManager:
   - Joystick
   - Soldier
   - Interactive
+  - Build
+  - Ground
   layers:
   - Default
   - TransparentFX

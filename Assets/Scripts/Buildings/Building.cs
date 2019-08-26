@@ -5,7 +5,7 @@ using UnityEngine;
 public class Building : MonoBehaviour
 {
     public float life = 100f;
-  
+    public bool isEnemy = false;
     // Start is called before the first frame update
     void Start()
     {
