@@ -276,6 +276,8 @@ MonoBehaviour:
   timeToAttack: 1
   agent: {fileID: 4808822288655054382}
   distanceToHelp: 5
+  healthBarPrefab: {fileID: 114666807447272468, guid: 0e30d8b31c849a3498a9ba520abc8539,
+    type: 3}
 --- !u!195 &4808822288655054382
 NavMeshAgent:
   m_ObjectHideFlags: 0

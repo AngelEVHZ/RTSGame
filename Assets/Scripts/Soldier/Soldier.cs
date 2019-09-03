@@ -18,11 +18,22 @@ public class Soldier : MonoBehaviour
     private GameObject attackTarget;
     public float distanceToHelp = 5f;
     
+
+    public GameObject healthBarPrefab;
+    private HealthBarController healthBar;
     // Start is called before the first frame update
 
     private void Start() {
         agent.updateRotation = false;    
         this.timeToAttackCounter = timeToAttack;
+
+        GameObject healtBarObj = Instantiate(this.healthBarPrefab, new Vector3(transform.position.x,1.02f,transform.position.z ),healthBarPrefab.transform.rotation);
+         healtBarObj.gameObject.transform.parent = transform;
+        this.healthBar = healtBarObj.GetComponent<HealthBarController>();
+        this.healthBar.setHealth(this.life);
+        this.healthBar.updateHealthBar(this.life);
+        this.healthBar.hide(false);
+        
     }
     public void moveToPoint(RaycastHit hit, int count) {
         GameObject obj = hit.transform.gameObject;
@@ -65,6 +76,7 @@ public class Soldier : MonoBehaviour
         switch (this.state) {
             case State.IDLE: //iddle
                 Debug.Log("iddle " + this.isEnemy);
+
             break;
             case State.ATTACK: //Attack
                 Debug.Log("ATACK " + this.isEnemy);
@@ -83,10 +95,12 @@ public class Soldier : MonoBehaviour
         if (select)
         {
             Debug.Log("SELECTED");
+            this.healthBar.hide(true);
         }
         else
         {
             Debug.Log("DES SELECTED");
+            this.healthBar.hide(false);
         }
     }
 
@@ -125,7 +139,9 @@ public class Soldier : MonoBehaviour
 
 
     public void addDamage(float damage, GameObject attacker) {
+        this.healthBar.hide(true);
         this.life -= damage;
+        this.healthBar.updateHealthBar(this.life);
         if (this.life <= 0 ){
             Destroy(gameObject);
         }
